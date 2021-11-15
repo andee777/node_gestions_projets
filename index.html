@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Local Socket.IO chat</title>
+    <style>
+      body { margin: 0; padding-bottom: 3rem; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+      .form1 { background: rgba(0, 0, 0, 0.15); padding: 0.25rem; display: flex; flex-wrap: wrap; justify-content: center; box-sizing: border-box; backdrop-filter: blur(10px); }
+      #input { border: none; padding: 0 1rem; flex-grow: 1; border-radius: 2rem; margin: 0.25rem; }
+      #input:focus { outline: none; }
+      .form1 > button { background: #333; border: none; padding: 0 1rem; margin: 0.25rem; border-radius: 3px; outline: none; color: #fff; width: 150px; height: 40px; }
+      #messages { list-style-type: none; margin: 0; padding: 0; }
+      #messages > li { padding: 0.5rem 1rem; }
+      #messages > li:nth-child(odd) { background: #efefef; }
+    </style>
+  </head>
+  <body>
+    <ul id="messages"></ul>
+    <img id="ss" src="data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAAUA
+    AAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO
+        9TXL0Y4OHwAAAABJRU5ErkJggg==" alt="Red dot" style="width: 500px;height: 500px; object-fit: contain;" />
+    <div style="position: fixed; bottom: 0;">
+      <div class="form1">
+        <input id="input" autocomplete="off" />
+        <button onclick="sendMessage()">Send</button>
+      </div>
+      <div class="form1">
+        <button onclick="envoyerNotif()">Envoyer notif</button>
+        <button onclick="appendBot()">append as bot</button>
+        <button onclick="append()">append as andee777</button>
+        <button onclick="emitSigs()">emit sigs</button>
+        <button onclick="uploadPic()">upload Pic</button>
+      </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        var socket = io();
+      
+        var input = document.getElementById('input');
+        var messages = document.getElementById('messages');
+
+        const emitSigs = () => {
+            socket.emit('emitSig', "hello");
+        };        
+        
+        const uploadPic = () => {
+          console.log('uploading');
+          socket.emit('uploadPic','hello');
+        };
+
+        const sendMessage = () => {
+          if (input.value) {
+            socket.emit('chat message', input.value);
+            input.value = '';
+          }
+        };
+
+        socket.on('picUploaded', function(msg) {
+            console.log('uploaded', msg);
+            document.getElementById("ss").src = msg;
+        });
+
+        socket.on('chat message', function(msg) {
+            var item = document.createElement('li');
+            item.textContent = msg;
+            messages.appendChild(item);
+            window.scrollTo(0, document.body.scrollHeight);
+        });
+
+        socket.on('signalements', function(msg) {
+            console.log(msg);
+        });
+
+        const envoyerNotif = () => {
+          console.log('ee');
+          socket.emit('envoyerPushNotif', 'Notif1');
+        };
+
+        const appendBot = () => {
+          var chars = '01234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghiklmnopqrstuvwxyz'; 
+          var stringlength = 5;
+          var text = '';
+          for (var i = 0; i < stringlength; i++) {
+            var rnum = Math.floor(Math.random() * chars.length);
+            text += chars.substring(rnum,rnum+1);
+          }
+          var source = 'https://i.imgur.com/' + text + '.jpg';
+          socket.emit('appendCoords', {
+            "location":
+              {"latitude":45.46166203668446+Math.random(),
+              "longitude":-75.7686774494903+Math.random(),
+              "longitudeDelta":0.05,"latitudeDelta":0.05},
+            "cite":"Gatineau",
+            "id": new Date().toISOString() + "andee777",
+            "util":"andee777bot","date":new Date().toISOString(),
+            "type":"Depotoirs sauvages",
+            "categorie":"programme",
+            "pic": source
+          });
+        };
+        const append = () => {
+          var chars = '01234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghiklmnopqrstuvwxyz'; 
+          var stringlength = 5;
+          var text = '';
+          for (var i = 0; i < stringlength; i++) {
+            var rnum = Math.floor(Math.random() * chars.length);
+            text += chars.substring(rnum,rnum+1);
+          }
+          var source = 'https://i.imgur.com/' + text + '.jpg';
+          socket.emit('appendCoords', {
+            "location":
+              {"latitude":45.46166203668446+Math.random(),
+              "longitude":-75.7686774494903+Math.random(),
+              "longitudeDelta":0.05,"latitudeDelta":0.05},
+            "cite":"Gatineau",
+            "id": new Date().toISOString() + "andee777",
+            "util":"andee777","date":new Date().toISOString(),
+            "type":"Depotoirs sauvages",
+            "categorie":"signale",
+            "pic": source
+          });
+        };
+    </script>
+  </body>
+</html>

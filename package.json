@@ -1,0 +1,22 @@
+{
+  "name": "node_gestions_projets",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "body-parser": "^1.19.0",
+    "csvtojson": "^2.0.10",
+    "express": "^4.17.1",
+    "express-device": "^0.4.2",
+    "papaparse": "^5.3.1",
+    "parse-json": "^5.2.0",
+    "png-to-jpeg": "^1.0.1",
+    "sqlite3": "^5.0.2"
+  }
+}
